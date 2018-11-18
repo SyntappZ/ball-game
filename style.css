@@ -1,0 +1,68 @@
+ /* font-family: 'Niramit', sans-serif; */
+
+body{
+   margin:0;
+   padding:0;
+   border:0;
+   background-color:rgb(34, 34, 34);
+   color:#fff;
+   text-align: center;
+   text-transform: capitalize;
+   font-family: 'Cabin Sketch', cursive;
+}
+canvas{
+   width:60%;
+   height: 85vh;
+   background-color:#fff;
+   border:solid 6px rgb(65, 60, 60);
+   border-radius:5px;
+}
+.hud{
+   width:20%;
+   height:100vh;
+   position: absolute;
+   top:0;
+}
+.hud h2{
+   padding-top:100px;
+}
+#legend{
+   right:0;
+}
+#leftHud{
+   left:0;
+}
+#leftHud h2{
+  padding-left:80px;
+  text-align:left;
+}
+#name{
+   font-family: 'Niramit', sans-serif;
+   position: absolute;
+   bottom:10px;
+   left:0;
+   right:0;
+   margin:auto;
+}
+.legBox{
+   width:80%;
+   height:70%;
+   background-color:#000;
+   margin:50px auto;
+   border:#fff solid 1px;
+   border-radius:5px;
+}
+.instructBox{
+   width:80%;
+   height:55%;
+   background-color:#000;
+   margin:50px auto;
+   border:#fff solid 1px;
+   border-radius:5px;
+}
+#inst{
+   padding:0;
+   text-align: center;
+   
+}
+
