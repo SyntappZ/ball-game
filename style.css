@@ -4,11 +4,15 @@ body{
    margin:0;
    padding:0;
    border:0;
-   background-color:rgb(34, 34, 34);
+   background: url(img/Brick-background.jpg);
    color:#fff;
    text-align: center;
    text-transform: capitalize;
    font-family: 'Cabin Sketch', cursive;
+}
+.title{
+   font-size:50px;
+   
 }
 canvas{
    background-color:#fff;
@@ -34,26 +38,19 @@ canvas{
   padding-left:80px;
   text-align:left;
 }
-#name{
-   font-family: 'Niramit', sans-serif;
-   position: absolute;
-   bottom:20px;
-   left:0;
-   right:0;
-   margin:auto;
-}
+
 .legBox{
    width:80%;
-   height:70%;
-   background-color:#000;
+   height:60vh;
+   background-color:rgba(0, 0, 0, 0.753);
    margin:50px auto;
    border:#fff solid 1px;
    border-radius:5px;
 }
 .instructBox{
    width:80%;
-   height:55%;
-   background-color:#000;
+   height:45vh;
+   background-color:rgba(0, 0, 0, 0.753);
    margin:50px auto;
    border:#fff solid 1px;
    border-radius:5px;
