@@ -8,8 +8,11 @@
     <link rel="stylesheet" href="style.css">
     <title>canvas</title>
 </head>
-<body>
-    <h1 class="title">Brick bash</h1>
+<body> 
+    <div class="titleWrap">
+        <h1 class="title">Panic Ball</h1>
+    </div>
+   
     <div id="leftHud" class="hud">
         <h2>level: <span id="level"></span></h2>
         <h2>Lives: <span id="lives"></span></h2>
@@ -17,7 +20,10 @@
         
         <div class="instructBox">
             <h2 id="inst">instructions</h2>
-            <p></p>
+            <p>press arrow keys to move paddle <br><br>
+            press space to release ball <br><br>
+        press p to pause</p>
+        <p></p>
         </div>
     </div>
 
@@ -27,7 +33,7 @@
         <h2>legend</h2>
         <div class="legBox"></div>
     </div>
-    <canvas width="1000" height="700"></canvas>
+    <canvas width="1000" height="600"></canvas>
     
     <script src="main.js"></script>
 </body>

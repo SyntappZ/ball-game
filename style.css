@@ -11,13 +11,26 @@ body{
    font-family: 'Cabin Sketch', cursive;
 }
 .title{
-   font-size:50px;
+   font-size:40px;
+   margin:0;
    
 }
+.titleWrap{
+   width:350px;
+   height:80px;
+   line-height:80px;
+   background-color:rgba(0, 0, 0, 0.781);
+   margin:20px auto;
+   border: solid 1px rgb(65, 60, 60);
+   border-radius:50px;
+}
 canvas{
-   background-color:#fff;
+   background-color:rgb(10, 10, 10);
    border:solid 6px rgb(65, 60, 60);
    border-radius:5px;
+}
+canvas:hover{
+   cursor: none;
 }
 .hud{
    width:20%;
@@ -55,15 +68,15 @@ canvas{
    height:60vh;
    background-color:rgba(0, 0, 0, 0.753);
    margin:50px auto;
-   border:#fff solid 1px;
+   border:rgb(65, 60, 60) solid 1px;
    border-radius:5px;
 }
 .instructBox{
    width:80%;
-   height:45vh;
+   height:40vh;
    background-color:rgba(0, 0, 0, 0.753);
    margin:50px auto;
-   border:#fff solid 1px;
+   border:rgb(65, 60, 60) solid 1px;
    border-radius:5px;
 }
 #inst{

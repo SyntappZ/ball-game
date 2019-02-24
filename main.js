@@ -1,16 +1,22 @@
+
+//created by martyn (syntappz)
+
+//Sound effects obtained from https://www.zapsplat.com“
+
+//audio 
+let end = new Audio('sounds/DarkSoundscape.mp3');
+let ballFall = new Audio('sounds/ballFall.mp3');
+let hitBrick = new Audio('sounds/hitBrick.mp3');
+let gameOver = new Audio('sounds/gameOver.mp3')
+
+
+
 let canvas = document.querySelector('canvas');
 let ctx = canvas.getContext('2d');
 let scoreBoard = document.getElementById('score');
 let lifeBoard = document.getElementById('lives');
 let levelBoard = document.getElementById('level');
 let pause = document.getElementById('paused');
-
-//ball variables
-let x = canvas.width/2;
-let y = canvas.height-30;
-let dx = 4;
-let dy = -4;
-let ballRadius = 6;
 
 //paddle variables
 let paddleHeight = 15;
@@ -19,13 +25,22 @@ let paddleX = (canvas.width - paddleWidth) / 2;
 let paddleY = canvas.height - paddleHeight;
 let paddleSpeed = 7;
 
+//ball variables
+let x = paddleX + paddleWidth/2;
+let y = canvas.height - paddleHeight;
+let dx = 4;
+let dy = -4;
+let ballRadius = 6;
+
+
+
 //keyboard variables
 let rightPressed = false;
 let leftPressed = false;
 
 //brick variables
-let brickRowCount = 5;
-let brickColumnCount = 16; // 11 at most
+let brickRowCount = 10;
+let brickColumnCount = 16; // 16 at most
 let brickWidth = 50;
 let brickHeight = 20;
 let brickPadding = 10;
@@ -33,10 +48,12 @@ let brickOffsetTop = 30;
 let brickOffsetLeft = 30;
 
 //game variables
+let interval = setInterval(draw, 10)
 let lives = 3;
 let level = 1;
 let score = 0;
 let paused = false;
+let ballOut = false;
 
 //bricks
 let bricks = [];
@@ -47,15 +64,18 @@ for(let c = 0; c < brickColumnCount; c++) {
     }
 }
 
+
+
 function updateGame() {
     scoreBoard.innerHTML = score;
     lifeBoard.innerHTML = lives;
+    levelBoard.innerHTML = level;
 }
 
 function drawBall() {
     ctx.beginPath();
     ctx.arc(x, y, ballRadius, 0, Math.PI*2, false);
-    ctx.fillStyle = '#2E0927';
+    ctx.fillStyle = '#fff';
     ctx.fill();
     ctx.closePath();
 }
@@ -68,9 +88,9 @@ function drawPaddle() {
     ctx.closePath();
 }
 
-function drawBricks() {
+function drawBricks(b) {
     for(let c = 0; c < brickColumnCount; c++) {
-        for(let r = 0; r < brickRowCount; r++) {
+        for(let r = 0; r < brickRowCount; r = r + b) {
             if(bricks[c][r].status == 1) {
                 let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
                 let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
@@ -86,6 +106,7 @@ function drawBricks() {
     }
 }
 
+
 function collisionDetection() {
     for(var c=0; c<brickColumnCount; c++) {
         for(var r=0; r<brickRowCount; r++) {
@@ -95,6 +116,8 @@ function collisionDetection() {
                     dy = -dy;
                     b.status = 0;
                     score += 100;
+                    hitBrick.currentTime = 0;
+                    hitBrick.play()
                 }
             }
            
@@ -114,17 +137,20 @@ function togglePause() {
 
 }
 
+
 function draw() {
    if(!paused) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBricks()
+    levels()
     drawBall();
     drawPaddle();
     collisionDetection();
     updateGame()
    
-    x += dx;
-    y += dy;
+    if(ballOut){
+        x += dx;
+        y += dy;
+    }
     
 
 
@@ -139,15 +165,27 @@ function draw() {
     else if (y + dy > canvas.height - ballRadius) {
       if(x > paddleX && x < paddleX + paddleWidth){
           dy = -dy;
+          
       }else{
+          ballFall.play();
           lives--
+          ballOut = false
         if(!lives){
-            alert('GAME OVER! ' + 'your score was ' + score)
-            document.location.reload();
-            clearInterval(interval);
+            setTimeout(() => {
+                gameOver.play();
+            }, 700);
+
+            setTimeout(() => {
+                theme.play()
+                document.location.reload();
+                alert('GAME OVER! ' + 'your score was ' + score);
+                
+                clearInterval(interval);
+            }, 702);
+           
         }else{
             x = canvas.width/2;
-            y = canvas.height-30;
+            y = canvas.height - paddleHeight;
             dx = 4;
             dx = -4;
             paddleX = (canvas.width-paddleWidth)/2;
@@ -159,15 +197,41 @@ function draw() {
     //paddle move left and right
     if(rightPressed && paddleX < canvas.width - paddleWidth) {
         paddleX += paddleSpeed;
+        if(ballOut === false){
+            x += paddleSpeed
+        }
+        
     }
     else if(leftPressed && paddleX > 0) {
         paddleX -= paddleSpeed;
+        if(ballOut === false){
+            x -= paddleSpeed;
+        }
+       
     }
    }
     
 }
 
 
+//mouse functionality
+function mouseMoveHandler(e) {
+    let relativeX = e.clientX - canvas.offsetLeft;
+    if(relativeX > paddleWidth/2 && relativeX < canvas.width - paddleWidth/2) {
+        paddleX = relativeX - paddleWidth/2;
+        if(ballOut === false){
+            x = relativeX;
+        }
+    }
+}
+
+canvas.addEventListener('click', () => {
+    ballOut = true
+})
+
+
+
+//keyboard controlls
 function keyDownHandler(e) {
     if(e.key === 'Right' || e.key === 'ArrowRight') {
         rightPressed = true;
@@ -190,20 +254,35 @@ document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 
 
-let interval = setInterval(draw, 10)
+
 
 window.addEventListener('keydown', function (e) {
     let key = e.keyCode;
     if (key === 80){
         togglePause();
     }
-    })
+})
+ 
 
-//mouse functionality 
-//document.addEventListener("mousemove", mouseMoveHandler, false);
-// function mouseMoveHandler(e) {
-//     let relativeX = e.clientX - canvas.offsetLeft;
-//     if(relativeX > 0 && relativeX < canvas.width) {
-//         paddleX = relativeX - paddleWidth/2;
-//     }
-// }
+window.addEventListener('keydown', () => {
+    let key = e.keyCode;
+    if (key === 32){
+        ballOut = true;
+    }
+});    
+   
+
+   
+
+document.addEventListener("mousemove", mouseMoveHandler, false);
+
+
+
+
+//level 1
+
+function levels() {
+    brickColumnCount = 15;
+    brickOffsetLeft = 60;
+    drawBricks(2)
+}
