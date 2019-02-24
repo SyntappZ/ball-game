@@ -8,6 +8,7 @@ let end = new Audio('sounds/DarkSoundscape.mp3');
 let ballFall = new Audio('sounds/ballFall.mp3');
 let hitBrick = new Audio('sounds/hitBrick.mp3');
 let gameOver = new Audio('sounds/gameOver.mp3')
+let paddleHit = new Audio('sounds/paddle.mp3')
 
 
 
@@ -17,6 +18,8 @@ let scoreBoard = document.getElementById('score');
 let lifeBoard = document.getElementById('lives');
 let levelBoard = document.getElementById('level');
 let pause = document.getElementById('paused');
+let nextLevel = document.getElementById('levelNumber');
+let stage = document.getElementById('stage');
 
 //paddle variables
 let paddleHeight = 15;
@@ -70,6 +73,7 @@ function updateGame() {
     scoreBoard.innerHTML = score;
     lifeBoard.innerHTML = lives;
     levelBoard.innerHTML = level;
+    stage.innerHTML = level + 1;
 }
 
 function drawBall() {
@@ -118,6 +122,25 @@ function collisionDetection() {
                     score += 100;
                     hitBrick.currentTime = 0;
                     hitBrick.play()
+                    if(score === brickRowCount*brickColumnCount * 100) {
+                        
+                        // nextLevel.style.display = 'block';
+                        setTimeout(() => {
+                            nextLevel.style.opacity = '1';
+                            nextLevel.style.top = '400px';
+                        }, 100);
+                        setTimeout(() => {
+                            nextLevel.style.opacity = '0';
+                            nextLevel.style.top = '500px';
+                        }, 1000);
+                        setTimeout(() => {
+                            // nextLevel.style.display = 'none';
+                            paddleCenter();
+                            level++
+                        }, 2000);
+                        
+                       
+                    }
                 }
             }
            
@@ -165,7 +188,7 @@ function draw() {
     else if (y + dy > canvas.height - ballRadius) {
       if(x > paddleX && x < paddleX + paddleWidth){
           dy = -dy;
-          
+          paddleHit.play();
       }else{
           ballFall.play();
           lives--
@@ -176,23 +199,25 @@ function draw() {
             }, 700);
 
             setTimeout(() => {
-                theme.play()
                 document.location.reload();
                 alert('GAME OVER! ' + 'your score was ' + score);
-                
                 clearInterval(interval);
             }, 702);
            
         }else{
-            x = canvas.width/2;
-            y = canvas.height - paddleHeight;
-            dx = 4;
-            dx = -4;
-            paddleX = (canvas.width-paddleWidth)/2;
+            paddleCenter()
         }
        
       }
     }   
+
+    function paddleCenter() {
+        x = canvas.width/2;
+        y = canvas.height - paddleHeight;
+        dx = 4;
+        dx = -4;
+        paddleX = (canvas.width-paddleWidth)/2;
+    }
 
     //paddle move left and right
     if(rightPressed && paddleX < canvas.width - paddleWidth) {
@@ -282,7 +307,17 @@ document.addEventListener("mousemove", mouseMoveHandler, false);
 //level 1
 
 function levels() {
-    brickColumnCount = 15;
+    brickRowCount = 1;
+    brickColumnCount = 1;
+    brickPadding = 15;
     brickOffsetLeft = 60;
-    drawBricks(2)
+    drawBricks(2);
+
+    if(level === 2){
+        brickRowCount = 14;
+        brickColumnCount = 12;
+        brickPadding = 15;
+        brickOffsetLeft = 60;
+        drawBricks(2);
+    }
 }

@@ -42,7 +42,18 @@ canvas:hover{
    padding-top:50px;
 }
 #paused {
-   color:#000;
+   color:#fff;
+   position: absolute;
+   margin:auto;
+   top:400px;
+   z-index: 100;
+   font-size:50px;
+   left:0;
+   right:0;
+   display:none;
+}
+#levelNumber {
+   color:#fff;
    position: absolute;
    margin:auto;
    top:500px;
@@ -50,7 +61,9 @@ canvas:hover{
    font-size:50px;
    left:0;
    right:0;
-   display:none;
+   /* display: none; */
+   opacity: 0;
+   transition: .3 ease-in-out;
 }
 #legend{
    right:0;
@@ -78,6 +91,8 @@ canvas:hover{
    margin:50px auto;
    border:rgb(65, 60, 60) solid 1px;
    border-radius:5px;
+   padding:15px;
+   box-sizing: border-box;
 }
 #inst{
    padding:0;
