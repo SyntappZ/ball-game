@@ -73,7 +73,7 @@ function updateGame() {
     scoreBoard.innerHTML = score;
     lifeBoard.innerHTML = lives;
     levelBoard.innerHTML = level;
-    stage.innerHTML = level + 1;
+    stage.innerHTML = level;
 }
 
 function drawBall() {
@@ -123,18 +123,21 @@ function collisionDetection() {
                     hitBrick.currentTime = 0;
                     hitBrick.play()
                     if(score === brickRowCount*brickColumnCount * 100) {
-                        
-                        // nextLevel.style.display = 'block';
+                        console.log('stage 0')
+                        //  nextLevel.style.display = 'block';
                         setTimeout(() => {
                             nextLevel.style.opacity = '1';
                             nextLevel.style.top = '400px';
+                            console.log('stage 1')
                         }, 100);
                         setTimeout(() => {
                             nextLevel.style.opacity = '0';
                             nextLevel.style.top = '500px';
+                            console.log('stage 2')
                         }, 1000);
                         setTimeout(() => {
                             // nextLevel.style.display = 'none';
+                            console.log('stage 3')
                             paddleCenter();
                             level++
                         }, 2000);
@@ -211,13 +214,7 @@ function draw() {
       }
     }   
 
-    function paddleCenter() {
-        x = canvas.width/2;
-        y = canvas.height - paddleHeight;
-        dx = 4;
-        dx = -4;
-        paddleX = (canvas.width-paddleWidth)/2;
-    }
+    
 
     //paddle move left and right
     if(rightPressed && paddleX < canvas.width - paddleWidth) {
@@ -301,7 +298,13 @@ window.addEventListener('keydown', () => {
 
 document.addEventListener("mousemove", mouseMoveHandler, false);
 
-
+function paddleCenter() {
+    x = canvas.width/2;
+    y = canvas.height - paddleHeight;
+    dx = 4;
+    dx = -4;
+    paddleX = (canvas.width-paddleWidth)/2;
+}
 
 
 //level 1
@@ -314,10 +317,15 @@ function levels() {
     drawBricks(2);
 
     if(level === 2){
-        brickRowCount = 14;
-        brickColumnCount = 12;
-        brickPadding = 15;
-        brickOffsetLeft = 60;
-        drawBricks(2);
+       console.log('level 2')
+
+
+
     }
 }
+
+
+   
+
+
+console.log(brickGrid)
