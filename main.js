@@ -42,9 +42,8 @@ let rightPressed = false;
 let leftPressed = false;
 
 //brick variables
-let brickRowCount = 10;
-let brickColumnCount = 16; // 16 at most
-let brickWidth = 50;
+let brickGrid = [];
+let brickWidth = 70;
 let brickHeight = 20;
 let brickPadding = 10;
 let brickOffsetTop = 30;
@@ -58,15 +57,18 @@ let score = 0;
 let paused = false;
 let ballOut = false;
 
-//bricks
-let bricks = [];
-for(let c = 0; c < brickColumnCount; c++) {
-    bricks[c] = [];
-    for(let r = 0; r < brickRowCount; r++) {
-        bricks[c][r] = { x: 0, Y: 0, status: 1};
-    }
-}
+levelSelector()
 
+//bricks
+for(let c = 0; c < brickGrid.length; c++) {
+    for(let r = 0; r < brickGrid[c].length; r++) {
+        if(brickGrid[c][r] === 1){
+          brickGrid[c][r] = {x: 0, y:0, status: 1 }
+        }else{
+          brickGrid[c][r] = {x: 0, y:0, status: 0 }
+        }
+    }
+  }
 
 
 function updateGame() {
@@ -92,14 +94,14 @@ function drawPaddle() {
     ctx.closePath();
 }
 
-function drawBricks(b) {
-    for(let c = 0; c < brickColumnCount; c++) {
-        for(let r = 0; r < brickRowCount; r = r + b) {
-            if(bricks[c][r].status == 1) {
+function drawBricks() {
+    for(let c = 0; c < brickGrid.length; c++) {
+        for(let r = 0; r < brickGrid[c].length; r++) {
+            if(brickGrid[c][r].status == 1) {
                 let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
                 let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
-                bricks[c][r].x = brickX;
-                bricks[c][r].y = brickY;
+                brickGrid[c][r].x = brickX;
+                brickGrid[c][r].y = brickY;
                 ctx.beginPath();
                 ctx.rect(brickX, brickY, brickWidth, brickHeight);
                 ctx.fillStyle = "#555";
@@ -112,9 +114,9 @@ function drawBricks(b) {
 
 
 function collisionDetection() {
-    for(var c=0; c<brickColumnCount; c++) {
-        for(var r=0; r<brickRowCount; r++) {
-            var b = bricks[c][r];
+    for(let c = 0; c < brickGrid.length; c++) {
+        for(let r = 0; r < brickGrid[c].length; r++) {
+            var b = brickGrid[c][r];
             if(b.status === 1){
                 if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
                     dy = -dy;
@@ -122,28 +124,7 @@ function collisionDetection() {
                     score += 100;
                     hitBrick.currentTime = 0;
                     hitBrick.play()
-                    if(score === brickRowCount*brickColumnCount * 100) {
-                        console.log('stage 0')
-                        //  nextLevel.style.display = 'block';
-                        setTimeout(() => {
-                            nextLevel.style.opacity = '1';
-                            nextLevel.style.top = '400px';
-                            console.log('stage 1')
-                        }, 100);
-                        setTimeout(() => {
-                            nextLevel.style.opacity = '0';
-                            nextLevel.style.top = '500px';
-                            console.log('stage 2')
-                        }, 1000);
-                        setTimeout(() => {
-                            // nextLevel.style.display = 'none';
-                            console.log('stage 3')
-                            paddleCenter();
-                            level++
-                        }, 2000);
-                        
-                       
-                    }
+                   
                 }
             }
            
@@ -167,7 +148,7 @@ function togglePause() {
 function draw() {
    if(!paused) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    levels()
+    drawBricks()
     drawBall();
     drawPaddle();
     collisionDetection();
@@ -307,25 +288,55 @@ function paddleCenter() {
 }
 
 
-//level 1
-
-function levels() {
-    brickRowCount = 1;
-    brickColumnCount = 1;
-    brickPadding = 15;
-    brickOffsetLeft = 60;
-    drawBricks(2);
-
-    if(level === 2){
-       console.log('level 2')
+//levels
 
 
 
+function levelSelector() {
+    if(level === 1) {
+        brickGrid = [
+            [1,0,0,0,0,0,0,0,0,0,0],
+            [1,1,0,0,0,0,0,0,0,0,0],
+            [1,0,1,0,0,0,0,0,0,0,0],
+            [1,0,0,1,0,0,0,0,0,0,0],
+            [1,1,1,1,1,1,0,0,0,0,0],
+            [1,0,0,0,1,0,1,0,0,0,0],
+            [1,0,0,0,1,0,1,0,0,0,0],
+            [1,1,1,1,1,1,0,0,0,0,0],
+            [1,0,0,1,0,0,0,0,0,0,0],
+            [1,0,1,0,0,0,0,0,0,0,0],
+            [1,1,0,0,0,0,0,0,0,0,0],
+            [1,0,0,0,0,0,0,0,0,0,0],
+            
+        ]
     }
+    
+    if(level === 2){
+      brickGrid = [
+        [1,0,0,0,0,1,0,0,0,0,0],
+        [1,1,0,0,0,1,1,1,1,0,0],
+        [1,0,1,0,0,0,0,1,0,0,0],
+        [1,0,0,1,0,0,1,0,0,0,0],
+        [1,1,1,1,1,1,0,0,0,0,0],
+        [1,0,0,0,1,0,1,0,0,0,0],
+        [1,0,0,0,1,0,1,0,0,0,0],
+        [1,1,1,1,1,1,0,0,0,0,0],
+        [1,0,0,1,0,0,1,0,0,0,0],
+        [1,0,1,0,0,0,0,1,0,0,0],
+        [1,1,0,0,0,1,1,1,1,0,0],
+        [1,0,0,0,0,1,0,0,0,0,0],
+        
+        
+    ]
+    
+    }
+
+    return brickGrid
 }
+
+
 
 
    
 
 
-console.log(brickGrid)
